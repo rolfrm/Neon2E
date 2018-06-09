@@ -11,3 +11,5 @@ typedef struct _module_data{
 
 void * get_module_data(module_data * md);
 void set_module_data(module_data * md, void * data);
+
+extern data_stream neon_main;

@@ -41,6 +41,7 @@ typedef struct{
 #include "method_table.c"
 
 data_stream neon_main = { .name = "Neon"};
+data_stream neon_verbose = { .name = "Neon Verbose"};
 
 event_table_weight * get_event_table_weight(){
   static module_data event_table_weight_data;
@@ -219,7 +220,7 @@ int main(int argc, char ** argv){
     u64 ts2 = timestamp();
     var seconds_spent = ((double)(ts2 - ts) * 1e-6);
     
-    dmsg(neon_main, "%f s \n", seconds_spent);
+    dmsg(neon_verbose, "%f s \n", seconds_spent);
     if(seconds_spent < 0.016){
       iron_sleep(0.016 - seconds_spent);
     }

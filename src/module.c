@@ -15,6 +15,7 @@
 #include <iron/utils.h>
 #include <iron/linmath.h>
 #include <iron/math.h>
+#include <iron/datastream.h>
 #include<dlfcn.h>
 #include <sys/mman.h>
 #include <icydb.h>
@@ -33,7 +34,6 @@ void * module_symbol(void * module, const char * sym){
 char * module_error(){
   return dlerror();
 }
-
 
 engine_context current_context;
 
@@ -85,22 +85,22 @@ int load_module(const char * name){
     char * _name = string_vector_lookup(loaded_vec, id);
     if(_name == NULL)continue;
     if(strcmp(_name, name) == 0){
-      logd("Module '%s' is already loaded..\n", name);
+      dmsg(neon_main, "Module '%s' is already loaded..\n", name);
       return -1;
     }
   }
 
-  logd("Loading module '%s'\n", name);
+  dmsg(neon_main,"Loading module '%s'\n", name);
   void * module = module_open(name);;
   if(module == NULL){
-    loge("unable to load module '%s' %s\n", name, module_error());
+    dmsg(neon_main, "ERROR: unable to load module '%s' %s\n", name, module_error());
     ASSERT(false);
     return -1;
   }
 
   void (* init_module)() = module_symbol(module, "init_module");
   if(init_module == NULL){
-    loge("Unable to get 'init_module' from module '%s'\n", name);
+    dmsg(neon_main, "ERROR: Unable to get 'init_module' from module '%s'\n", name);
     return -1;
   }
 
